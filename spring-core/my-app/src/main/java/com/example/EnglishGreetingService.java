@@ -1,8 +1,8 @@
 package com.example;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component("englishGreetingService")
+@Service("englishGreetingService")
 public class EnglishGreetingService implements GreetingService {
     public void greet(){
         System.out.println("Hello!");

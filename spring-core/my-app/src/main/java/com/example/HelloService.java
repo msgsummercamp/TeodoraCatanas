@@ -2,10 +2,11 @@ package com.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class HelloService {
+    // Using @Qualifier to specify which bean to inject
     private final GreetingService greetingService;
 
     @Autowired
@@ -13,8 +14,5 @@ public class HelloService {
         this.greetingService = greetingService;
     }
 
-
-    public void sayHello(){
-        greetingService.greet();
-    }
+    public void sayHello(){greetingService.greet();}
 }
