@@ -44,5 +44,5 @@ public class AppTest
 
         String output = outContent.toString().trim();
         assertTrue( "Output should contain environment: " + expectedEnv, output.contains( "Environment: " + expectedEnv ) );
-    }
+
 }
