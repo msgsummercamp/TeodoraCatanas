@@ -4,6 +4,9 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 /**
  * Unit test for simple App.
  */
@@ -28,11 +31,18 @@ public class AppTest
         return new TestSuite( AppTest.class );
     }
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    public void testMainPrintsEnv(){
+        String expectedEnv = "test-env";
+        System.setProperty( "env", expectedEnv );
+
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut( new PrintStream( outContent ) );
+
+        App.main( new String[]{} );
+        System.setOut( originalOut );
+
+        String output = outContent.toString().trim();
+        assertTrue( "Output should contain environment: " + expectedEnv, output.contains( "Environment: " + expectedEnv ) );
     }
 }
