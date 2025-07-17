@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface UserInterface {
     List<User> getAllUsers();
+    User getUserById(int id);
+    boolean deleteUser(int id);
 }

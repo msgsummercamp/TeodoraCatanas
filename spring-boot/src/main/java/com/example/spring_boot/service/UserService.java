@@ -16,4 +16,12 @@ public class UserService implements ServiceInterface{
     public List<User> getUsers() {
         return userRepository.getAllUsers();
     }
+    @Override
+    public User getUserById(int id) {
+        return userRepository.getUserById(id);
+    }
+    @Override
+    public boolean deleteUser(int id) {
+        return userRepository.deleteUser(id);
+    }
 }
