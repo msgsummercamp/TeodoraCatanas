@@ -24,6 +24,10 @@ public class UserRepository implements UserInterface {
         return users.stream().filter(user -> user.getId() == id).findFirst().orElse(null);
     }
     @Override
+    public void addUser(User user) {
+        users.add(user);
+    }
+    @Override
     public boolean deleteUser(int id) {
         User user = getUserById(id);
         if (user != null) {

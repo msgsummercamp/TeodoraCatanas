@@ -6,5 +6,6 @@ import java.util.List;
 public interface ServiceInterface {
     List<User> getUsers();
     User getUserById(int id);
+    User addUser(User user);
     boolean deleteUser(int id);
 }

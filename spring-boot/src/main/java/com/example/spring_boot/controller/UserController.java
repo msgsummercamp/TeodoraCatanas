@@ -29,6 +29,13 @@ public class UserController {
         log.info("Getting user with id: {}", id);
         return userService.getUserById(id);
     }
+    @PostMapping
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        log.info("Adding new user: {}", user);
+        User createdUser = userService.addUser(user);
+        log.info("Created user with id: {}", createdUser.getId());
+        return ResponseEntity.ok(createdUser);
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUserById(@PathVariable int id) {
         log.info("Attempting to deleting user with id: {}", id);

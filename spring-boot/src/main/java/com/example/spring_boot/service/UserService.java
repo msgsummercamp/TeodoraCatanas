@@ -21,6 +21,11 @@ public class UserService implements ServiceInterface{
         return userRepository.getUserById(id);
     }
     @Override
+    public User addUser(User user) {
+        userRepository.addUser(user);
+        return user;
+    }
+    @Override
     public boolean deleteUser(int id) {
         return userRepository.deleteUser(id);
     }
