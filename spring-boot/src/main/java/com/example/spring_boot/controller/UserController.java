@@ -2,6 +2,7 @@ package com.example.spring_boot.controller;
 
 import com.example.spring_boot.model.User;
 import com.example.spring_boot.service.UserService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class UserController {
         return userService.getUserById(id);
     }
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
         log.info("Adding new user: {}", user);
         User createdUser = userService.addUser(user);
         log.info("Created user with id: {}", createdUser.getId());

@@ -1,7 +1,12 @@
 package com.example.spring_boot.model;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
 public class User {
+    @Min(value = 1, message = "ID must be greater than 0")
     private int id;
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
     //Constructor
