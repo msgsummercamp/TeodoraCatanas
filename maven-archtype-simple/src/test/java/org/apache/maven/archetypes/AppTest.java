@@ -7,9 +7,11 @@ import junit.framework.TestSuite;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+
 public class AppTest extends TestCase {
     //Test case for the App class
     public AppTest(String testName)
+
     {
         super(testName);
     }
