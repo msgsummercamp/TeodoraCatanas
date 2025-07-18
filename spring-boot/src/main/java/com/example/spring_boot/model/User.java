@@ -9,12 +9,11 @@ public class User {
     @NotBlank(message = "Name cannot be blank")
     private String name;
 
-    //Constructor
     public User(int id, String name) {
         this.id = id;
         this.name = name;
     }
-    //Getter and Setter methods
+
     public int getId() {
         return id;
     }

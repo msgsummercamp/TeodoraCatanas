@@ -11,7 +11,6 @@ public class UserRepository implements UserInterface {
     private final List<User> users = new ArrayList<>();
 
     public UserRepository() {
-        // Adding some sample users
         users.add(new User(1, "Alice"));
         users.add(new User(2, "Bob"));
         users.add(new User(3, "Charlie"));
