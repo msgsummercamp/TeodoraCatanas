@@ -1,5 +1,7 @@
 package com.example.spring_data_jpa.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Getter
@@ -8,7 +10,9 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Entity
 public class User {
+    @Id
     private int id;
     private String username;
     private String email;
