@@ -45,18 +45,15 @@ public class UserController {
         return userService.updateUser(user);
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/username/{username}")
     public User findUserByUsername(@PathVariable String username) {
         log.info("Fetching users with username: {}", username);
         return userService.findUserByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public User findUserByEmail(@PathVariable String email) {
         log.info("Fetching users with email: {}", email);
         return userService.findUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
     }
-
-
-
 }
