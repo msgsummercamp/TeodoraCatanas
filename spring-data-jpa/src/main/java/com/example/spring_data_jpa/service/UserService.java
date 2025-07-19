@@ -64,6 +64,11 @@ public class UserService {
         log.info("Fetching users with email: {}", email);
         return userRepository.findByEmail(email);
     }
+
+    public long countUsers() {
+        log.info("Counting all users in the database");
+        return userRepository.count();
+    }
 }
 
 

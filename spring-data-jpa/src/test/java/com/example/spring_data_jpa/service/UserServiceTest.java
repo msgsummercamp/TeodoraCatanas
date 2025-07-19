@@ -5,6 +5,7 @@ import com.example.spring_data_jpa.repository.UserRepositoryInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,23 +19,18 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    private User user;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        user = new User();
-        user.setId(1);
-        user.setUsername("john_doe");
-        user.setEmail("john@example.com");
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setPassword("pass");
+    }
+
+    private User sampleUser() {
+        return new User(1, "john_doe", "john@example.com", "secret123", "John", "Doe");
     }
 
     @Test
     void testFindAllUsers() {
-        List<User> userList = List.of(user);
+        List<User> userList = List.of(sampleUser());
         when(userRepository.findAll()).thenReturn(userList);
         List<User> result = userService.findAllUsers();
         assertEquals(1, result.size());
@@ -43,6 +39,7 @@ class UserServiceTest {
 
     @Test
     void testFindUserById_Found() {
+        User user = sampleUser();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         User result = userService.findUserById(1);
         assertNotNull(result);
@@ -60,6 +57,7 @@ class UserServiceTest {
 
     @Test
     void testSaveUser() {
+        User user = sampleUser();
         when(userRepository.save(user)).thenReturn(user);
         User result = userService.saveUser(user);
         assertEquals(user, result);
@@ -68,6 +66,7 @@ class UserServiceTest {
 
     @Test
     void testDeleteUser_Found() {
+        User user = sampleUser();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         doNothing().when(userRepository).delete(user);
         User result = userService.deleteUser(1);
@@ -86,6 +85,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUser_UserExists() {
+        User user = sampleUser();
         when(userRepository.existsById(user.getId())).thenReturn(true);
         when(userRepository.save(user)).thenReturn(user);
         User result = userService.updateUser(user);
@@ -95,6 +95,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUser_UserDoesNotExist() {
+        User user = sampleUser();
         when(userRepository.existsById(user.getId())).thenReturn(false);
         User result = userService.updateUser(user);
         assertNull(result);
@@ -103,6 +104,7 @@ class UserServiceTest {
 
     @Test
     void testFindUserByUsername() {
+        User user = sampleUser();
         when(userRepository.findByUsername("john_doe")).thenReturn(Optional.of(user));
         Optional<User> result = userService.findUserByUsername("john_doe");
         assertTrue(result.isPresent());
@@ -112,6 +114,7 @@ class UserServiceTest {
 
     @Test
     void testFindUserByEmail() {
+        User user = sampleUser();
         when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(user));
         Optional<User> result = userService.findUserByEmail("john@example.com");
         assertTrue(result.isPresent());
@@ -135,5 +138,11 @@ class UserServiceTest {
         verify(userRepository).findByEmail("nonexistent@example.com");
     }
 
-
+    @Test
+    void testCountUsers() {
+        when(userRepository.count()).thenReturn(42L);
+        long result = userService.countUsers();
+        assertEquals(42L, result);
+        verify(userRepository, times(1)).count();
+    }
 }
