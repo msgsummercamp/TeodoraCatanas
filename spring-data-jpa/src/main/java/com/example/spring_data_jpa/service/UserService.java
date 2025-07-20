@@ -6,7 +6,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,12 +54,12 @@ public class UserService {
         return null;
     }
 
-    public Optional<User> findUserByUsername(@RequestBody String username) {
+    public Optional<User> findUserByUsername(String username) {
         log.info("Fetching users with name: {}", username);
         return userRepository.findByUsername(username);
     }
 
-    public Optional<User> findUserByEmail(@RequestBody String email) {
+    public Optional<User> findUserByEmail(String email) {
         log.info("Fetching users with email: {}", email);
         return userRepository.findByEmail(email);
     }

@@ -6,12 +6,16 @@ import com.example.rest.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -21,57 +25,88 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getUsers() {
+    public ResponseEntity<Page<User>> getUsers() {
         log.info("Fetching all users");
-        return userService.findAllUsers();
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<User> users = userService.findAllUsers(pageable);
+        return users.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable int id) {
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
         log.info("Fetching user with id: {}", id);
-        return userService.findUserById(id);
-    }
-
-    @PostMapping
-    public User addUser(@Valid @RequestBody User user) {
-        log.info("Adding new user: {}", user);
-        return userService.saveUser(user);
-    }
-
-    @DeleteMapping("/{id}")
-    public User deleteUserById(@PathVariable int id) {
-        log.info("Attempting to delete user with id: {}", id);
-        return userService.deleteUser(id);
-    }
-
-    @PutMapping
-    public User updateUser(@Valid @RequestBody User user) {
-        log.info("Updating user: {}", user);
-        return userService.updateUser(user);
-    }
-
-    @GetMapping("/username/{username}")
-    public User findUserByUsername(@PathVariable String username) {
-        return userService.findUserByUsername(username)
+        return Optional.ofNullable(userService.findUserById(id))
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
+    @PostMapping
+    public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
+        log.info("Adding new user: {}", user);
+        User savedUser = userService.saveUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<User> deleteUserById(@PathVariable int id) {
+        log.info("Attempting to delete user with id: {}", id);
+        User deletedUser = userService.deleteUser(id);
+        if (deletedUser == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }else{
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
+        log.info("Updating user: {}", user);
+        User updatedUser = userService.updateUser(user);
+        if (updatedUser == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        } else {
+            return ResponseEntity.ok(updatedUser);
+        }
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<Optional<User>> findUserByUsername(@PathVariable String username) {
+        log.info("Fetching users with name: {}", username);
+        Optional<User> user = userService.findUserByUsername(username);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        } else {
+            return ResponseEntity.ok(user);
+        }
+    }
+
     @GetMapping("/email/{email}")
-    public User findUserByEmail(@PathVariable String email) {
+    public ResponseEntity<Optional<User>> findUserByEmail(@PathVariable String email) {
         log.info("Fetching users with email: {}", email);
-        return userService.findUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<User> user = userService.findUserByEmail(email);
+        if (user.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        } else {
+            return ResponseEntity.ok(user);
+        }
     }
 
     @GetMapping("/count")
-    public long countUsers() {
+    public ResponseEntity<Long> countUsers() {
         log.info("Counting all users");
-        return userService.countUsers();
+        long count = userService.countUsers();
+        log.info("Total users count: {}", count);
+        return ResponseEntity.ok(count);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<User> patchUser(@PathVariable int id,@Valid @RequestBody UserPatchDto patchDto) {
         log.info("Partially updating user with id: {}", id);
         User updatedUser = userService.patchUser(id, patchDto);
-        return ResponseEntity.ok(updatedUser);
+        if (updatedUser == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        } else {
+            return ResponseEntity.ok(updatedUser);
+        }
     }
 }
