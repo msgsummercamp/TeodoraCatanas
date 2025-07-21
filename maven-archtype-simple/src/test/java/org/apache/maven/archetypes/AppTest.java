@@ -7,14 +7,11 @@ import junit.framework.TestSuite;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-
 public class AppTest extends TestCase {
     public AppTest(String testName)
-
     {
         super(testName);
     }
-
     public static Test suite()
     {
         return new TestSuite(AppTest.class);
@@ -23,7 +20,7 @@ public class AppTest extends TestCase {
     public void testMainPrintsEnv() {
         String expectedEnv = "test-env";
         System.setProperty("env", expectedEnv);
-
+      
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outContent));
