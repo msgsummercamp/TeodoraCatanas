@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,6 +34,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved users"),
             @ApiResponse(responseCode = "204", description = "No users found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<Page<User>> getUsers() {
         log.info("Fetching all users");
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
@@ -46,6 +48,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved user"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         log.info("Fetching user with id: {}", id);
         return Optional.ofNullable(userService.findUserById(id))
@@ -59,6 +62,7 @@ public class UserController {
             @ApiResponse(responseCode = "201", description = "User successfully created"),
             @ApiResponse(responseCode = "400", description = "Invalid user data")
     })
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
         log.info("Adding new user: {}", user);
         User savedUser = userService.saveUser(user);
@@ -71,6 +75,7 @@ public class UserController {
             @ApiResponse(responseCode = "204", description = "User successfully deleted"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> deleteUserById(@PathVariable int id) {
         log.info("Attempting to delete user with id: {}", id);
         User deletedUser = userService.deleteUser(id);
@@ -87,6 +92,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User successfully updated"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
         log.info("Updating user: {}", user);
         User updatedUser = userService.updateUser(user);
@@ -103,6 +109,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User found"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<Optional<User>> findUserByUsername(@PathVariable String username) {
         log.info("Fetching users with name: {}", username);
         Optional<User> user = userService.findUserByUsername(username);
@@ -119,6 +126,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User found"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<Optional<User>> findUserByEmail(@PathVariable String email) {
         log.info("Fetching users with email: {}", email);
         Optional<User> user = userService.findUserByEmail(email);
@@ -135,6 +143,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Total users count retrieved"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<Long> countUsers() {
         log.info("Counting all users");
         long count = userService.countUsers();
@@ -149,6 +158,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "400", description = "Invalid patch data")
     })
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<User> patchUser(@PathVariable int id,@Valid @RequestBody UserPatchDto patchDto) {
         log.info("Partially updating user with id: {}", id);
         User updatedUser = userService.patchUser(id, patchDto);
