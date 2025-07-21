@@ -5,7 +5,6 @@ import com.example.spring_security.model.User;
 import com.example.spring_security.model.Role;
 import com.example.spring_security.repository.RoleRepository;
 import com.example.spring_security.repository.UserRepositoryInterface;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,10 +46,8 @@ public class UserService {
 
     public User saveUser(User user) {
         log.info("Saving user: {}", user);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (user.getRoles() != null && !user.getRoles().isEmpty()) {
-            Set<String> roleNames = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
-            user.setRoles(fetchRolesByNames(roleNames));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         return userRepository.save(user);
     }
@@ -75,10 +71,6 @@ public class UserService {
             return null;
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (user.getRoles() != null && !user.getRoles().isEmpty()) {
-            Set<String> roleNames = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
-            user.setRoles(fetchRolesByNames(roleNames));
-        }
         return userRepository.save(user);
     }
 
@@ -112,23 +104,6 @@ public class UserService {
             user.setRoles(fetchRolesByNames(patchDto.getRoles()));
         return userRepository.save(user);
     }
-
-    @PostConstruct
-    public void encodeExistingPasswords() {
-        List<User> users = userRepository.findAll();
-        for (User user : users) {
-            String password = user.getPassword();
-            // Skip if already encoded
-            if (!password.startsWith("$2a$") && !password.startsWith("$2b$")) {
-                String encoded = passwordEncoder.encode(password);
-                user.setPassword(encoded);
-                log.info("Encoded password for user: {}", user.getUsername());
-            }
-        }
-        userRepository.saveAll(users);
-    }
-
-
 }
 
 

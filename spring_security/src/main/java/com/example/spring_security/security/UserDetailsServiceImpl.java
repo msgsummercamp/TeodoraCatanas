@@ -14,14 +14,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
-
     private final UserRepositoryInterface userRepository;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
