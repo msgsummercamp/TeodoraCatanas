@@ -55,12 +55,12 @@ public class UserService {
         return null;
     }
 
-    public Optional<User> findUserByUsername(@RequestBody String username) {
+    public Optional<User> findUserByUsername(String username) {
         log.info("Fetching users with name: {}", username);
         return userRepository.findByUsername(username);
     }
 
-    public Optional<User> findUserByEmail(@RequestBody String email) {
+    public Optional<User> findUserByEmail(String email) {
         log.info("Fetching users with email: {}", email);
         return userRepository.findByEmail(email);
     }
