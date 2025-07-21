@@ -7,42 +7,35 @@ import junit.framework.TestSuite;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
+public class AppTest extends TestCase {
+    //Test case for the App class
+    public AppTest(String testName)
     {
-        super( testName );
+        super(testName);
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
+    // Test suite method to group tests in this class
     public static Test suite()
     {
-        return new TestSuite( AppTest.class );
+        return new TestSuite(AppTest.class);
     }
 
-    public void testMainPrintsEnv(){
+    // Test method to verify that the main method of App prints the expected environment variable
+    public void testMainPrintsEnv() {
         String expectedEnv = "test-env";
-        System.setProperty( "env", expectedEnv );
+        System.setProperty("env", expectedEnv);
 
+        // Capture the output of the main method
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         PrintStream originalOut = System.out;
-        System.setOut( new PrintStream( outContent ) );
+        System.setOut(new PrintStream(outContent));
 
-        App.main( new String[]{} );
-        System.setOut( originalOut );
+        // Call the main method of the App class
+        App.main(new String[]{});
+        System.setOut(originalOut);
 
+        // Verify that the output contains the expected environment variable
         String output = outContent.toString().trim();
-        assertTrue( "Output should contain environment: " + expectedEnv, output.contains( "Environment: " + expectedEnv ) );
-
+        assertTrue("Output should contain environment: " + expectedEnv, output.contains("Environment: "+expectedEnv));
+    }
 }
