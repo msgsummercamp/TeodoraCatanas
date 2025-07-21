@@ -1,8 +1,11 @@
 package org.apache.maven.archetypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class App {
-    // This is a simple Java application that prints the value of the "env" system property
+    private static final Logger log = LoggerFactory.getLogger( App.class );
+
     public static void main(String[] args) {
-        System.out.println("Environment: "+System.getProperty("env"));
+        log.info("Environment: {}", System.getProperty("env"));
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class HelloService {
-    // Using @Qualifier to specify which bean to inject
     private final GreetingService greetingService;
 
     @Autowired
