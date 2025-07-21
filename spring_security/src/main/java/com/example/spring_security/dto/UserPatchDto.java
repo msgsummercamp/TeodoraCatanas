@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,4 +22,5 @@ public class UserPatchDto {
     private String password;
     private String firstName;
     private String lastName;
+    private Set<String> roles;
 }
