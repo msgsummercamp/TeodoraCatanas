@@ -104,16 +104,19 @@ class UserControllerTest {
 
     @Test
     void testFindUserByUsername_Found() throws Exception {
-        when(userService.findUserByUsername("john_doe")).thenReturn(Optional.of(sampleUser()));
-        mockMvc.perform(get("/users/username/john_doe"))
+        User user = sampleUser();
+        when(userService.findUserByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        mockMvc.perform(get("/users/username")
+                        .param("username", user.getUsername()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username", is("john_doe")));
+                .andExpect(jsonPath("$.username", is(user.getUsername())));
     }
 
     @Test
     void testFindUserByUsername_NotFound() throws Exception {
         when(userService.findUserByUsername("unknown")).thenReturn(Optional.empty());
-        mockMvc.perform(get("/users/username/unknown"))
+        mockMvc.perform(get("/users/username")
+                        .param("username", "unknown"))
                 .andExpect(status().isNotFound())
                 .andExpect(status().reason(containsString("User not found")));
     }
@@ -121,7 +124,8 @@ class UserControllerTest {
     @Test
     void testFindUserByEmail_Found() throws Exception {
         when(userService.findUserByEmail("john@example.com")).thenReturn(Optional.of(sampleUser()));
-        mockMvc.perform(get("/users/email/john@example.com"))
+        mockMvc.perform(get("/users/email")
+                        .param("email", "john@example.com"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email", is("john@example.com")));
     }

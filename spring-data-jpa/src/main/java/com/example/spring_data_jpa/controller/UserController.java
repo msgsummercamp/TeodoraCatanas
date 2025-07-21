@@ -48,16 +48,16 @@ public class UserController {
         return userService.updateUser(user);
     }
 
-    @GetMapping("/username/{username}")
-    public User findUserByUsername(@PathVariable String username) {
+    @GetMapping("/username")
+    public User findUserByUsername(@RequestParam String username) {
         return userService.findUserByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
-    @GetMapping("/email/{email}")
-    public User findUserByEmail(@PathVariable String email) {
+    @GetMapping("/email")
+    public User findUserByEmail(@RequestParam String email) {
         log.info("Fetching users with email: {}", email);
-        return userService.findUserByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return userService.findUserByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     @GetMapping("/count")

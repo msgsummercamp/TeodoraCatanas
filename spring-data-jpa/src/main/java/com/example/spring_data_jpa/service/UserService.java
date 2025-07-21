@@ -2,11 +2,11 @@ package com.example.spring_data_jpa.service;
 
 import com.example.spring_data_jpa.model.User;
 import com.example.spring_data_jpa.repository.UserRepositoryInterface;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +25,8 @@ public class UserService {
 
     public User findUserById(int id) {
         log.info("Fetching user with id: {}", id);
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
     }
 
     public User saveUser(User user) {
@@ -36,23 +37,16 @@ public class UserService {
     public User deleteUser(int id) {
         log.info("Attempting to delete user with id: {}", id);
         User user = findUserById(id);
-        if (user != null) {
-            log.info("Deleting user: {}", user);
-            userRepository.delete(user);
-            return user;
-        }
-        log.warn("User with id: {} not found", id);
-        return null;
+        log.info("Deleting user with id: {}", id);
+        userRepository.deleteById(id);
+        return user;
     }
 
     public User updateUser(User user) {
         log.info("Updating user: {}", user);
-        if (userRepository.existsById(user.getId())) {
-            log.info("User with id: {} exists, proceeding with update", user.getId());
-            return userRepository.save(user);
-        }
-        log.warn("User with id: {} does not exist, cannot update", user.getId());
-        return null;
+        findUserById(user.getId());
+        log.info("User with id: {} exists, proceeding with update", user.getId());
+        return userRepository.save(user);
     }
 
     public Optional<User> findUserByUsername(String username) {

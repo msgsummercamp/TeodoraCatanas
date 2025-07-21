@@ -2,15 +2,18 @@ package com.example.spring_data_jpa.service;
 
 import com.example.spring_data_jpa.model.User;
 import com.example.spring_data_jpa.repository.UserRepositoryInterface;
-import org.junit.jupiter.api.BeforeEach;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     @Mock
@@ -18,11 +21,6 @@ class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     private User sampleUser() {
         return new User(1, "john_doe", "john@example.com", "secret123", "John", "Doe");
@@ -50,8 +48,7 @@ class UserServiceTest {
     @Test
     void testFindUserById_NotFound() {
         when(userRepository.findById(2)).thenReturn(Optional.empty());
-        User result = userService.findUserById(2);
-        assertNull(result);
+        assertThrows(EntityNotFoundException.class, () -> userService.findUserById(2));
         verify(userRepository).findById(2);
     }
 
@@ -68,39 +65,42 @@ class UserServiceTest {
     void testDeleteUser_Found() {
         User user = sampleUser();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        doNothing().when(userRepository).delete(user);
+        doNothing().when(userRepository).deleteById(1);
         User result = userService.deleteUser(1);
         assertNotNull(result);
         assertEquals(1, result.getId());
-        verify(userRepository).delete(user);
+        verify(userRepository).findById(1);
+        verify(userRepository).deleteById(1);
     }
 
     @Test
     void testDeleteUser_NotFound() {
         when(userRepository.findById(99)).thenReturn(Optional.empty());
-        User result = userService.deleteUser(99);
-        assertNull(result);
-        verify(userRepository, never()).delete(any());
+        assertThrows(EntityNotFoundException.class, () -> userService.deleteUser(99));
+        verify(userRepository).findById(99);
+        verify(userRepository, never()).deleteById(anyInt());
     }
 
     @Test
     void testUpdateUser_UserExists() {
         User user = sampleUser();
-        when(userRepository.existsById(user.getId())).thenReturn(true);
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
         User result = userService.updateUser(user);
         assertNotNull(result);
+        verify(userRepository).findById(user.getId());
         verify(userRepository).save(user);
     }
 
     @Test
     void testUpdateUser_UserDoesNotExist() {
         User user = sampleUser();
-        when(userRepository.existsById(user.getId())).thenReturn(false);
-        User result = userService.updateUser(user);
-        assertNull(result);
+        when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> userService.updateUser(user));
+        verify(userRepository).findById(user.getId());
         verify(userRepository, never()).save(any());
     }
+
 
     @Test
     void testFindUserByUsername() {
