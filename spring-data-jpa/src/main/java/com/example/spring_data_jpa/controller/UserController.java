@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,9 +20,19 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getUsers() {
-        log.info("Fetching all users");
-        return userService.findAllUsers();
+    public List<User> getUsers(@Valid @RequestParam(required = false) String email, @Valid @RequestParam(required = false) String username) {
+            if (email != null) {
+                log.info("Fetching user with email: {}", email);
+                return List.of(userService.findUserByEmail(email)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
+            }
+            if (username != null) {
+                log.info("Fetching user with username: {}", username);
+                return List.of(userService.findUserByUsername(username)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
+            }
+            log.info("Fetching all users");
+            return userService.findAllUsers();
     }
 
     @GetMapping("/{id}")
@@ -37,27 +48,16 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public User deleteUserById(@PathVariable int id) {
+    public ResponseEntity<Void> deleteUserById(@PathVariable int id) {
         log.info("Attempting to delete user with id: {}", id);
-        return userService.deleteUser(id);
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
         log.info("Updating user: {}", user);
         return userService.updateUser(user);
-    }
-
-    @GetMapping("/username")
-    public User findUserByUsername(@RequestParam String username) {
-        return userService.findUserByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-    }
-
-    @GetMapping("/email")
-    public User findUserByEmail(@RequestParam String email) {
-        log.info("Fetching users with email: {}", email);
-        return userService.findUserByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     @GetMapping("/count")

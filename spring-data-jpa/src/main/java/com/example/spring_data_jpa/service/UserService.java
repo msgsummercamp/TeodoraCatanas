@@ -34,12 +34,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User deleteUser(int id) {
+    public void deleteUser(int id) {
         log.info("Attempting to delete user with id: {}", id);
-        User user = findUserById(id);
+        findUserById(id);
         log.info("Deleting user with id: {}", id);
         userRepository.deleteById(id);
-        return user;
     }
 
     public User updateUser(User user) {

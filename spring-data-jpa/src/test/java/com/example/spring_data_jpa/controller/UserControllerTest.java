@@ -80,10 +80,9 @@ class UserControllerTest {
 
     @Test
     void testDeleteUserById() throws Exception {
-        when(userService.deleteUser(1)).thenReturn(sampleUser());
+        doNothing().when(userService).deleteUser(1);
         mockMvc.perform(delete("/users/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)));
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -106,16 +105,16 @@ class UserControllerTest {
     void testFindUserByUsername_Found() throws Exception {
         User user = sampleUser();
         when(userService.findUserByUsername(user.getUsername())).thenReturn(Optional.of(user));
-        mockMvc.perform(get("/users/username")
+        mockMvc.perform(get("/users")
                         .param("username", user.getUsername()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username", is(user.getUsername())));
+                .andExpect(jsonPath("$[0].username", is(user.getUsername())));
     }
 
     @Test
     void testFindUserByUsername_NotFound() throws Exception {
         when(userService.findUserByUsername("unknown")).thenReturn(Optional.empty());
-        mockMvc.perform(get("/users/username")
+        mockMvc.perform(get("/users")
                         .param("username", "unknown"))
                 .andExpect(status().isNotFound())
                 .andExpect(status().reason(containsString("User not found")));
@@ -123,11 +122,12 @@ class UserControllerTest {
 
     @Test
     void testFindUserByEmail_Found() throws Exception {
-        when(userService.findUserByEmail("john@example.com")).thenReturn(Optional.of(sampleUser()));
-        mockMvc.perform(get("/users/email")
+        User user = sampleUser();
+        when(userService.findUserByEmail("john@example.com")).thenReturn(Optional.of(user));
+        mockMvc.perform(get("/users")
                         .param("email", "john@example.com"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email", is("john@example.com")));
+                .andExpect(jsonPath("$[0].email", is("john@example.com")));
     }
 
     @Test

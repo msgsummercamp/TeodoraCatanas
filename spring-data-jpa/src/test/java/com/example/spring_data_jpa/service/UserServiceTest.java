@@ -65,10 +65,7 @@ class UserServiceTest {
     void testDeleteUser_Found() {
         User user = sampleUser();
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
-        doNothing().when(userRepository).deleteById(1);
-        User result = userService.deleteUser(1);
-        assertNotNull(result);
-        assertEquals(1, result.getId());
+        userService.deleteUser(1);
         verify(userRepository).findById(1);
         verify(userRepository).deleteById(1);
     }
