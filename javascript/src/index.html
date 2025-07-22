@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random Animal Gallery</title>
+    <style>
+        body {
+            font-family: Gabarito ExtraBold, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        #statusMessage {
+            margin-top: 20px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<h1>Random Animal Gallery</h1>
+<button id="showDogBtn">Show me a dog!</button>
+<button id="showCatBtn">Show me a cat!</button>
+<p id="statusMessage"></p>
+<img id="animalImage" src="" alt="A cute animal will appear here!" style="display:none;" />
+<script src="main.js"></script>
+</body>
+</html>
