@@ -22,7 +22,7 @@ async function fetchImg<T>(apiUrl: string, extractUrl: (data: T) => string): Pro
         status.textContent = '';
     }catch (error) {
         console.error('Failed to fetch image:', error);
-        status.textContent = '🐾 Failed to load image. Try again!';
+        status.textContent = 'Failed to load image. Try again!';
     }
 }
 
