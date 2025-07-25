@@ -1,0 +1,30 @@
+<main>
+  <div class="container">
+    <button
+      mat-button
+      color="primary"
+      class="button_show_animal"
+      (click)="getDog()"
+    >
+      Show me a dog!
+    </button>
+    <button
+      mat-button
+      color="primary"
+      class="button_show_animal"
+      (click)="getCat()"
+    >
+      Show me a cat!
+    </button>
+  </div>
+  <p>{{ status() }}</p>
+  <div class="img-container">
+    @if (imgUrl()) {
+      <img
+        [src]="imgUrl()"
+        class="img-random-animal"
+        alt="Random Animal Image "
+      />
+    }
+  </div>
+</main>
