@@ -7,8 +7,7 @@ import { IfAdminDirective } from './directives/if-admin.directive';
   standalone: true,
   imports: [RouterOutlet, IfAdminDirective],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  public isAdmin = true; // Just for testing
+  public readonly isAdmin = true; // Just for testing
 }
