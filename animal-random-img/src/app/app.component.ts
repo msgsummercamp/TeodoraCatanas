@@ -12,8 +12,8 @@ type CatApiResponse = { url: string }[];
   imports: [MatButtonModule],
 })
 export class AppComponent {
-  public imgUrl = signal<string>('');
-  public status = signal<string>('');
+  public readonly imgUrl = signal<string>('');
+  public readonly status = signal<string>('');
 
   constructor(private imageService: ImageService) {}
 
