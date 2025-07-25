@@ -11,7 +11,14 @@ type CatApiResponse = { url: string }[];
 
 @Component({
   selector: 'app-root',
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, RouterLink, RouterOutlet, IfAdminDirective],
+  imports: [
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    RouterLink,
+    RouterOutlet,
+    IfAdminDirective,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
