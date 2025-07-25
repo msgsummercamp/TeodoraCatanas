@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ImageService } from './services/image.service';
 import { IfAdminDirective } from './directives/if-admin.directive';
@@ -11,7 +11,14 @@ type CatApiResponse = { url: string }[];
 
 @Component({
   selector: 'app-root',
-  imports: [MatToolbarModule, MatButtonModule, MatIcon, RouterLink, RouterOutlet, IfAdminDirective],
+  imports: [
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    RouterLink,
+    RouterOutlet,
+    IfAdminDirective,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
