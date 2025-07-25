@@ -1,0 +1,39 @@
+toolbar_style {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 1000;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.button_show_animal {
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
+}
+
+.img-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.img-random-animal {
+  width: 50rem;
+  height: 50rem;
+  object-fit: cover;
+}
