@@ -1,0 +1,25 @@
+.login-form {
+  max-width: 22rem;
+  margin: 2em auto;
+  padding: 2em 1.5em;
+  background: darkviolet;
+  border-radius: 0.5em;
+  box-shadow: 0 0.125em 0.5em rgba(0, 0, 0, 0.08);
+
+  .form-field {
+    width: 100%;
+    margin-bottom: 0.5em;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 1em;
+  }
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+  display: block;
+}

@@ -1,1 +1,26 @@
-<p>login works!</p>
+<form class="login-form" novalidate [formGroup]="loginFormGroup" (ngSubmit)="onFormSubmit()">
+  <mat-form-field appearance="fill" class="form-filed">
+    <mat-label>Email</mat-label>
+    <input matInput type="text" id="email" formControlName="email" />
+    @if (loginFormGroup.controls.email.errors?.['required']) {
+      <mat-error class="error-message">Email is required.</mat-error>
+    }
+    @if (loginFormGroup.controls.email.errors?.['email']) {
+      <mat-error class="error-message">Please enter a valid email address.</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="form-filed">
+    <mat-label>Password</mat-label>
+    <input matInput type="text" id="password" formControlName="password" />
+    @if (loginFormGroup.controls.password.errors?.['required']) {
+      <mat-error class="error-message">Password is required.</mat-error>
+    }
+    @if (loginFormGroup.controls.password.errors?.['minlength']) {
+      <mat-error class="error-message">Password must be at least 6 characters long.</mat-error>
+    }
+  </mat-form-field>
+  <button mat-button color="primary" type="submit" [disabled]="loginFormGroup.invalid"
+    >Login</button
+  >
+</form>
